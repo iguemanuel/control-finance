@@ -43,7 +43,11 @@ export class RegisterComponent {
         footer: `Agora você pode realizar o login. ${user.name}`,
       });
     } catch (error) {
-      alert('Erro ao fazer cadastro!');
+      Swal.fire({
+        icon: 'error',
+        title: 'Algo deu errado!',
+        text: 'Tente novamente.',
+      });
     }
   }
 }
