@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { Injectable } from '@angular/core';
+import axios from 'axios';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +20,9 @@ export class AuthService {
         }
       );
 
-      // Salvar token no localStorage
+      // Salvar token e ID do usuário no localStorage
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.record));
+      localStorage.setItem('userId', response.data.record.id); // Salva o ID
 
       return response.data.record;
     } catch (error) {
@@ -31,7 +31,7 @@ export class AuthService {
     }
   }
 
-  // Registro de novo usuário
+  // Registro de um novo usuário
   async register(name: string, email: string, password: string) {
     try {
       const response = await axios.post(
@@ -40,25 +40,34 @@ export class AuthService {
           username: name,
           email: email,
           password: password,
-          passwordConfirm: password,
+          passwordConfirm: password, // Confirmação da senha
         }
       );
 
-      return response.data;
+      // Salvar token e ID do usuário no localStorage após o registro
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('userId', response.data.record.id); // Salva o ID
+
+      return response.data.record; // Retorna o usuário registrado
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
       throw error;
     }
   }
 
+  // Obtém o ID do usuário armazenado no localStorage
+  getUserId(): string | null {
+    return localStorage.getItem('userId');
+  }
+
   // Verifica se o usuário está autenticado
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return localStorage.getItem('token') !== null;
   }
 
   // Logout
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem('userId');
   }
 }

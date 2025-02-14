@@ -28,9 +28,23 @@ export class LoginComponent {
         draggable: true,
         footer: 'Bem-vindo, ' + user.name,
       });
-      this.router.navigate(['/home']); // Redirecionar após login
+      // Redireciona para o dashboard e passa o ID do usuário na URL
+      this.router.navigate(['/dashboard', user.id]);
     } catch (error) {
-      alert('Erro ao fazer login!');
+      if (this.email === '' || this.password === '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Preencha todos os campos!',
+          text: 'E-mail e senha são obrigatórios.',
+        });
+      }
+      if (this.email !== '' && this.password !== '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'E-mail ou senha incorretos!',
+          text: 'Tente novamente.',
+        });
+      }
     }
   }
 }
