@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ButtonComponent } from '../../components/button/button.component';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,11 @@ export class RegisterComponent {
 
   async onRegister() {
     if (this.password !== this.confirmPassword) {
-      alert('As senhas não coincidem!');
+      Swal.fire({
+        icon: 'error',
+        title: 'As senhas não conicidem!',
+        text: 'Tente novamente.',
+      });
       return;
     }
 
@@ -31,7 +36,12 @@ export class RegisterComponent {
         this.password
       );
       console.log('Usuário cadastrado:', user);
-      alert('Cadastro realizado com sucesso!');
+      Swal.fire({
+        title: 'Cadastro realizado com sucesso!',
+        icon: 'success',
+        draggable: true,
+        footer: `Agora você pode realizar o login. ${user.name}`,
+      });
     } catch (error) {
       alert('Erro ao fazer cadastro!');
     }

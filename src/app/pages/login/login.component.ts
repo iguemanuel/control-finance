@@ -3,6 +3,7 @@ import { ButtonComponent } from '../../components/button/button.component';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -19,12 +20,14 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   async onLogin() {
-    console.log('Email:', this.email);
-    console.log('Senha:', this.password);
     try {
       const user = await this.authService.login(this.email, this.password);
-      console.log('Usuário logado:', user);
-      alert('Login realizado com sucesso!');
+      Swal.fire({
+        title: 'Logado com sucesso!',
+        icon: 'success',
+        draggable: true,
+        footer: 'Bem-vindo, ' + user.name,
+      });
       this.router.navigate(['/home']); // Redirecionar após login
     } catch (error) {
       alert('Erro ao fazer login!');
