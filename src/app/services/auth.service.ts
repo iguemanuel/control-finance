@@ -40,17 +40,23 @@ export class AuthService {
           username: name,
           email: email,
           password: password,
-          passwordConfirm: password, // Confirmação da senha
+          passwordConfirm: password,
         }
       );
 
-      // Salvar token e ID do usuário no localStorage após o registro
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', response.data.record.id); // Salva o ID
+      console.log('Resposta da API no registro:', response.data); // Verifica a resposta da API
 
-      return response.data.record; // Retorna o usuário registrado
+      if (!response.data || !response.data.id) {
+        throw new Error(
+          'A resposta da API não contém um ID de usuário válido.'
+        );
+      }
+
+      localStorage.setItem('userId', response.data.id); // Salva o ID corretamente
+
+      return response.data; // Retorna o objeto do usuário corretamente
     } catch (error) {
-      console.error('Erro ao cadastrar usuário:', error);
+      console.log('Erro ao cadastrar usuário:', error);
       throw error;
     }
   }

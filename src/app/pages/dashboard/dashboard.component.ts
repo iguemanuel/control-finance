@@ -2,13 +2,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
+import { TransactionModalComponent } from '../../components/transaction-modal/transaction-modal.component';
 
 @Component({
   standalone: true,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [SidebarComponent],
+  imports: [SidebarComponent, TransactionModalComponent],
 })
 export class DashboardComponent implements OnInit {
   userId: string | null = '';
