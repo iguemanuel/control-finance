@@ -1,14 +1,14 @@
 // dashboard.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 
 @Component({
   standalone: true,
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  imports: [NavbarComponent],
+  imports: [SidebarComponent],
 })
 export class DashboardComponent implements OnInit {
   userId: string | null = '';
