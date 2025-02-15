@@ -1,27 +1,56 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TransactionModalComponent } from './transaction-modal.component';
+import { FormsModule } from '@angular/forms';
+import { TransactionModel } from '../../models/transaction';
 
-@Component({
-  selector: 'app-transaction-modal',
-  standalone: true,
-  templateUrl: './transaction-modal.component.html',
-  styleUrl: './transaction-modal.component.css',
-})
-export class TransactionModalComponent {
-  ammount: number = 0;
-  type: string = 'expense'; // Default: Gasto
+describe('TransactionModalComponent', () => {
+  let component: TransactionModalComponent;
+  let fixture: ComponentFixture<TransactionModalComponent>;
 
-  @Output() saveTransaction = new EventEmitter<{
-    ammount: number;
-    type: string;
-  }>();
-  @Output() closeModal = new EventEmitter<void>();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [TransactionModalComponent],
+      imports: [FormsModule],
+    }).compileComponents();
+  });
 
-  onSave() {
-    if (!this.ammount || this.ammount <= 0) {
-      alert('Digite um valor válido!');
-      return;
-    }
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TransactionModalComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges(); // Detecta as mudanças no componente
+  });
 
-    this.saveTransaction.emit({ ammount: this.ammount, type: this.type });
-  }
-}
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should initialize transaction model with default values', () => {
+    expect(component.transaction.name).toBe('');
+    expect(component.transaction.type).toBe('IN');
+    expect(component.transaction.category).toBe('');
+    expect(component.transaction.value).toBe(0);
+    expect(component.transaction.description).toBe('');
+  });
+
+  it('should call submitForm and log the transaction data', () => {
+    spyOn(console, 'log'); // Espia o método console.log
+
+    // Modifica alguns dados da transação para testar
+    component.transaction.name = 'Venda Produto A';
+    component.transaction.value = 100;
+    component.transaction.category = 'Venda';
+    component.transaction.type = 'IN';
+
+    component.submitForm();
+
+    // Verifica se o console.log foi chamado
+    expect(console.log).toHaveBeenCalledWith({
+      name: 'Venda Produto A',
+      type: 'IN',
+      category: 'Venda',
+      value: 100,
+      date: undefined,
+      description: undefined,
+    });
+  });
+});
