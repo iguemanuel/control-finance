@@ -1,18 +1,13 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { TransactionModalComponent } from '../transaction-modal/transaction-modal.component';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [],
+  imports: [TransactionModalComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
-export class SidebarComponent {
-  // constructor(private route: Router, private authService: AuthService) {}
-  // logout() {
-  //   this.authService.logout();
-  //   this.route.navigate(['/login']);
-  // }
-}
+export class SidebarComponent {}

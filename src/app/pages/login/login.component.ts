@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ButtonComponent } from '../../components/button/button.component';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 

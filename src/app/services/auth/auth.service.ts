@@ -1,29 +1,34 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import { ConfigService } from '../../config/config.service'; // Importe o ConfigService
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'https://control-finance.sv1.igoremanuel.site'; // URL do PocketBase
+  private baseUrl: string;
+  private authEndpoints: any;
 
-  constructor() {}
+  constructor(private configService: ConfigService) {
+    // Inicializa a URL base e os endpoints do serviço de configuração
+    this.baseUrl = this.configService.getBaseUrl();
+    this.authEndpoints = this.configService.getAuthEndpoints();
+  }
 
   // Login do usuário
   async login(email: string, password: string) {
     try {
       const response = await axios.post(
-        `${this.baseUrl}/api/collections/users/auth-with-password`,
+        `${this.baseUrl}${this.authEndpoints.login}`, // Utiliza a URL configurada
         {
           identity: email,
           password: password,
         }
       );
 
-      // Salvar token e ID do usuário no localStorage
+      // Lógica do login
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('userId', response.data.record.id); // Salva o ID
-
+      localStorage.setItem('userId', response.data.record.id);
       return response.data.record;
     } catch (error) {
       console.error('Erro ao fazer login:', error);
@@ -35,7 +40,7 @@ export class AuthService {
   async register(name: string, email: string, password: string) {
     try {
       const response = await axios.post(
-        `${this.baseUrl}/api/collections/users/records`,
+        `${this.baseUrl}${this.authEndpoints.register}`, // Usando a URL configurada
         {
           username: name,
           email: email,

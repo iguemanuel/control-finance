@@ -6,6 +6,7 @@ export interface Transaction {
   value: number;
   date?: Date;
   description?: string;
+  userId: string;
 }
 
 export class TransactionModel implements Transaction {
@@ -16,6 +17,7 @@ export class TransactionModel implements Transaction {
   value: number;
   date?: Date;
   description?: string;
+  userId: string;
 
   constructor(transaction: Transaction) {
     this.name = transaction.name;
@@ -25,6 +27,7 @@ export class TransactionModel implements Transaction {
     this.value = transaction.value;
     this.date = transaction.date;
     this.description = transaction.description;
+    this.userId = transaction.userId;
   }
 
   get itemTransaction() {
@@ -36,6 +39,7 @@ export class TransactionModel implements Transaction {
       value: this.value,
       date: this.date,
       description: this.description,
+      userId: this.userId,
     };
   }
 }
