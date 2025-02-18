@@ -1,0 +1,100 @@
+<div class="flex h-screen px-4">
+  <!-- Coluna da imagem (escondida em telas pequenas) -->
+  <div class="hidden md:flex flex-1 items-center justify-center bg-gray-100">
+    <img
+      class="w-1/2"
+      src="../../../assets/register.svg"
+      alt="Imagem de Projeções"
+    />
+  </div>
+
+  <!-- Coluna do formulário de cadastro -->
+  <div class="flex-1 flex items-center justify-center bg-white">
+    <div class="max-w-md w-full px-4">
+      <!-- Adicionei px-4 aqui -->
+      <div class="text-center mb-6">
+        <img
+          src="../../../assets/icon-azul.svg"
+          alt="Control Finance Logo"
+          class="mx-auto w-40 mb-5"
+        />
+        <h2 class="mb-5 text-blue-800 text-2xl font-bold">Control Finance</h2>
+        <p class="text-gray-500">
+          Simplifique a gestão das suas finanças tenha controle total do seu
+          dinheiro em um só lugar.
+        </p>
+      </div>
+
+      <form #registerForm="ngForm" (ngSubmit)="onRegister()" class="w-full">
+        <!-- Campo de Nome -->
+        <div class="mb-4">
+          <label for="name" class="block text-sm font-medium text-gray-700"
+            >Nome Completo</label
+          >
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="name"
+            required
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <!-- Campo de Email -->
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Email</label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <!-- Campo de Senha -->
+        <div class="mb-4">
+          <label for="password" class="block text-sm font-medium text-gray-700"
+            >Senha</label
+          >
+          <input
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <!-- Campo de Confirmação de Senha -->
+        <div class="mb-6">
+          <label
+            for="confirm-password"
+            class="block text-sm font-medium text-gray-700"
+            >Confirme a Senha</label
+          >
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            required
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <app-button label="Cadastre-se" type="submit"></app-button>
+
+        <div class="text-center mt-4">
+          <p class="text-gray-500">Já possui uma conta?</p>
+          <a href="/login" class="text-blue-600 font-semibold">Faça login</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<div class="flex h-screen px-4">
+  <!-- Coluna da imagem -->
+  <div class="flex-1 hidden md:flex items-center justify-center bg-gray-100">
+    <img
+      class="w-1/2"
+      src="../../assets/Projections-amico 1.svg"
+      alt="Imagem de Projeções"
+    />
+  </div>
+
+  <!-- Coluna do formulário de login -->
+  <div class="flex-1 flex items-center justify-center bg-white">
+    <div class="max-w-md w-full">
+      <div class="text-center mb-6">
+        <img
+          src="../../../assets/icon-azul.svg"
+          alt="Control Finance Logo"
+          class="mx-auto w-40 mb-5"
+        />
+        <h2 class="mb-5 text-blue-800 text-2xl font-bold">Control Finance</h2>
+        <p class="text-gray-500">
+          Bem-vindo ao Control! Faça login para continuar gerenciando suas
+          finanças com facilidade.
+        </p>
+      </div>
+
+      <form (ngSubmit)="onLogin()">
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Email</label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <div class="mb-6">
+          <label for="password" class="block text-sm font-medium text-gray-700"
+            >Senha</label
+          >
+          <input
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <app-button label="Login"></app-button>
+
+        <div class="text-center mt-4">
+          <p class="text-gray-500">Ainda não tem conta?</p>
+          <a href="/register" class="text-blue-600 font-semibold"
+            >Cadastre-se</a
+          >
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
