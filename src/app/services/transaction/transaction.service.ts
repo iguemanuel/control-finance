@@ -37,14 +37,15 @@ export class TransactionService {
       const response = await axios.get(
         `${this.baseUrl}${this.transactionEndpoints.getAll}`
       );
-      return response.data;
+      console.log('Transações obtidas:', response.data);
+
+      return response.data.items;
     } catch (error) {
       console.error('Erro ao obter transações:', error);
       throw error;
     }
   }
 
-  // Atualiza uma transação existente
   async updateTransaction(id: string, transaction: TransactionModel) {
     try {
       const response = await axios.put(

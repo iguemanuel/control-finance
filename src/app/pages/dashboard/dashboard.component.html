@@ -6,5 +6,26 @@
   <div class="flex-1 p-6 ml-6">
     <h1 class="text-2xl font-bold">Dashboard</h1>
     <app-transaction-modal></app-transaction-modal>
+
+    <div class="grid grid-cols-3">
+      <app-card
+        [title]="'Total Entrada'"
+        [value]="entrada"
+        [customClass]="'text-green-600'"
+      >
+      </app-card>
+      <app-card
+        [title]="'Total Saída'"
+        [value]="saida"
+        [customClass]="'text-red-600'"
+      >
+      </app-card>
+      <app-card
+        [title]="'Saldo Atual'"
+        [value]="total"
+        [customClass]="total >= 0 ? 'text-green-600' : 'text-red-600'"
+      >
+      </app-card>
+    </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 export interface Transaction {
   name: string;
   id?: string;
-  type: 'IN' | 'OUT';
+  type: string;
   category: string;
   value: number;
   date?: Date;
@@ -12,7 +12,7 @@ export interface Transaction {
 export class TransactionModel implements Transaction {
   name: string;
   id?: string;
-  type: 'IN' | 'OUT';
+  type: string;
   category: string;
   value: number;
   date?: Date;

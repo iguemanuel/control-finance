@@ -19,11 +19,15 @@ export class TransactionModalComponent implements OnInit {
   transaction: TransactionModel = new TransactionModel({
     userId: '',
     name: '',
-    type: 'IN',
+    type: '',
     category: '',
     value: 0,
     description: '',
   });
+
+  updateTransactionType() {
+    this.transaction.type = this.transaction.category;
+  }
 
   isModalVisible: boolean = false;
 
@@ -37,11 +41,7 @@ export class TransactionModalComponent implements OnInit {
   }
 
   validateForm(): boolean {
-    if (
-      !this.transaction.name ||
-      !this.transaction.category ||
-      !this.transaction.description
-    ) {
+    if (!this.transaction.name || !this.transaction.category) {
       Swal.fire({
         title: 'Erro',
         text: 'Todos os campos obrigatórios devem ser preenchidos!',
@@ -64,6 +64,7 @@ export class TransactionModalComponent implements OnInit {
   }
 
   async submitForm() {
+    this.updateTransactionType();
     if (!this.validateForm()) {
       return; // Se a validação falhar, não envia o formulário
     }
@@ -80,8 +81,13 @@ export class TransactionModalComponent implements OnInit {
         draggable: true,
       });
 
-      // Fechar o modal
+      setTimeout(() => {
+        window.location.reload();
+      }, 30000);
+
       this.isModalVisible = false;
+
+      window.location.reload();
     } catch (error) {
       console.error('Erro ao criar transação:', error);
       Swal.fire({

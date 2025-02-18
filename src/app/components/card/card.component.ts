@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-card',
   standalone: true,
-  imports: [],
+  selector: 'app-card',
   templateUrl: './card.component.html',
-  styleUrl: './card.component.css'
+  styleUrls: ['./card.component.css'],
+  imports: [CommonModule],
 })
 export class CardComponent {
-
+  @Input() title: string = '';
+  @Input() value: number = 0;
+  @Input() customClass: string = '';
 }
