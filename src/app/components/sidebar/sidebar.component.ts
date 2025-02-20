@@ -10,4 +10,10 @@ import { TransactionModalComponent } from '../transaction-modal/transaction-moda
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+  constructor(private authService: AuthService) {}
+
+  logout() {
+    this.authService.logout();
+  }
+}

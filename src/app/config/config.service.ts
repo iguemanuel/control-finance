@@ -20,10 +20,12 @@ export class ConfigService {
 
   getTransactionEndpoints() {
     return {
-      create: '/api/collections/records/records', // Endpoint para criar transação
-      getAll: '/api/collections/records/records', // Endpoint para obter todas as transações
-      update: (id: string) => `/api/collections/records/records/${id}`, // Endpoint para atualizar transação
-      delete: (id: string) => `/api/collections/records/records/${id}`, // Endpoint para deletar transação
+      create: '/api/collections/records',
+      getAll: '/api/collections/records',
+      getByUserId: (userId: string) =>
+        `/api/collections/records/records?userId=${userId}`,
+      update: (id: string) => `/api/collections/records/${id}`,
+      delete: (id: string) => `/api/collections/records/${id}`,
     };
   }
 }

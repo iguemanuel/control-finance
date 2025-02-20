@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionModel } from '../../models/transaction';
@@ -15,6 +15,8 @@ import Swal from 'sweetalert2';
 })
 export class TransactionModalComponent implements OnInit {
   loggedUserId: string = '';
+
+  transactionAdd: EventEmitter<void> = new EventEmitter<void>();
 
   transaction: TransactionModel = new TransactionModel({
     userId: '',
@@ -35,6 +37,16 @@ export class TransactionModalComponent implements OnInit {
     private transactionService: TransactionService,
     private authService: AuthService
   ) {}
+
+  async fetchTransactions() {
+    try {
+      const transactions = await this.transactionService.getTransactions();
+      console.log('Lista atualizada de transações:', transactions);
+      // Aqui você pode atualizar um array local caso esteja armazenando transações no componente
+    } catch (error) {
+      console.error('Erro ao buscar transações:', error);
+    }
+  }
 
   ngOnInit() {
     this.loggedUserId = this.authService.getUserId() || '';
@@ -66,7 +78,7 @@ export class TransactionModalComponent implements OnInit {
   async submitForm() {
     this.updateTransactionType();
     if (!this.validateForm()) {
-      return; // Se a validação falhar, não envia o formulário
+      return;
     }
 
     try {
@@ -75,19 +87,28 @@ export class TransactionModalComponent implements OnInit {
         this.transaction
       );
       console.log('Transação criada:', newTransaction);
+
       Swal.fire({
         title: 'Transação criada com sucesso!',
         icon: 'success',
         draggable: true,
       });
 
-      setTimeout(() => {
-        window.location.reload();
-      }, 30000);
+      // Limpa o formulário para permitir um novo cadastro
+      this.transaction = new TransactionModel({
+        userId: '',
+        name: '',
+        type: '',
+        category: '',
+        value: 0,
+        description: '',
+      });
 
       this.isModalVisible = false;
 
-      window.location.reload();
+      await this.fetchTransactions();
+
+      this.transactionAdd.emit();
     } catch (error) {
       console.error('Erro ao criar transação:', error);
       Swal.fire({

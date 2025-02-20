@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
-import { ConfigService } from '../../config/config.service'; // Importe o ConfigService
+import { ConfigService } from '../../config/config.service';
 import { TransactionModel } from '../../models/transaction';
 
 @Injectable({
@@ -11,12 +11,10 @@ export class TransactionService {
   private transactionEndpoints: any;
 
   constructor(private configService: ConfigService) {
-    // Inicializa a URL base e os endpoints do serviço de configuração
     this.baseUrl = this.configService.getBaseUrl();
     this.transactionEndpoints = this.configService.getTransactionEndpoints();
   }
 
-  // Cria uma nova transação
   async createTransaction(transaction: TransactionModel) {
     try {
       const response = await axios.post(
@@ -31,7 +29,6 @@ export class TransactionService {
     }
   }
 
-  // Obtém todas as transações
   async getTransactions() {
     try {
       const response = await axios.get(
@@ -39,9 +36,28 @@ export class TransactionService {
       );
       console.log('Transações obtidas:', response.data);
 
-      return response.data.items;
+      return response.data.items || []; // Garante que o retorno é um array
     } catch (error) {
       console.error('Erro ao obter transações:', error);
+      throw error;
+    }
+  }
+
+  async getTransactionByUserId(userId: string) {
+    if (!userId) {
+      console.error('ID do usuário inválido');
+      return [];
+    }
+
+    try {
+      const url = `${this.baseUrl}${this.transactionEndpoints.getByUserId(
+        userId
+      )}`;
+      const response = await axios.get(url);
+      console.log('Transações obtidas:', response.data);
+      return response.data.items;
+    } catch (error) {
+      console.error('Erro ao obter transações do usuário: ', userId, error);
       throw error;
     }
   }
@@ -49,7 +65,7 @@ export class TransactionService {
   async updateTransaction(id: string, transaction: TransactionModel) {
     try {
       const response = await axios.put(
-        `${this.baseUrl}${this.transactionEndpoints.update(id)}`,
+        `${this.baseUrl}${this.transactionEndpoints.update}/${id}`,
         transaction
       );
       console.log('Transação atualizada com sucesso:', response.data);
@@ -60,11 +76,10 @@ export class TransactionService {
     }
   }
 
-  // Deleta uma transação
   async deleteTransaction(id: string) {
     try {
       const response = await axios.delete(
-        `${this.baseUrl}${this.transactionEndpoints.delete(id)}`
+        `${this.baseUrl}${this.transactionEndpoints.delete}/${id}`
       );
       console.log('Transação deletada com sucesso:', response.data);
       return response.data;

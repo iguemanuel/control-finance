@@ -19,13 +19,15 @@ import { TransactionService } from '../../services/transaction/transaction.servi
     CommonModule,
     TransactionModalComponent,
     CardComponent,
+    NavbarComponent,
+    DashboardChartsComponent,
   ],
 })
 export class DashboardComponent implements OnInit {
   entrada: number = 0;
   saida: number = 0;
   total: number = 0;
-  userId: string | null = '';
+  userId: string | null = null;
   transactions: TransactionModel[] = [];
 
   constructor(
@@ -38,25 +40,43 @@ export class DashboardComponent implements OnInit {
     await this.fetchTransactions();
   }
 
-  async fetchTransactions() {
+  async fetchTransactions(): Promise<void> {
     try {
-      // Busca as transações
-      this.transactions = await this.transactionService.getTransactions();
+      const user = this.userId || '';
+      console.log(user);
 
-      // Filtra e soma os valores de "IN" (entrada)
-      this.entrada = this.transactions
-        .filter((transaction) => transaction.type === 'IN')
-        .reduce((acc, curr) => acc + curr.value, 0);
-
-      // Filtra e soma os valores de "OUT" (saída)
-      this.saida = this.transactions
-        .filter((transaction) => transaction.type === 'OUT')
-        .reduce((acc, curr) => acc + curr.value, 0);
-
-      // Calcula o total (entrada - saída)
-      this.total = this.entrada - this.saida;
+      this.transactions = await this.transactionService.getTransactionByUserId(
+        user
+      );
+      this.calcularTotais();
     } catch (error) {
-      console.error('Erro ao carregar transações', error);
+      console.error('Erro ao carregar transações:', error);
     }
+  }
+
+  totalReceitas(): number {
+    return this.transactions
+      .filter((transaction) => transaction.type === 'IN')
+      .reduce((acc, curr) => acc + curr.value, 0);
+  }
+
+  totalDespesas(): number {
+    return this.transactions
+      .filter((transaction) => transaction.type === 'OUT')
+      .reduce((acc, curr) => acc + curr.value, 0);
+  }
+
+  calcularTotal(): number {
+    return this.totalReceitas() - this.totalDespesas();
+  }
+
+  calcularTotais(): void {
+    this.entrada = this.totalReceitas();
+    this.saida = this.totalDespesas();
+    this.total = this.calcularTotal();
+  }
+
+  onTransactionAdded(): void {
+    this.fetchTransactions();
   }
 }

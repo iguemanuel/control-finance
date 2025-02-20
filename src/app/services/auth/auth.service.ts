@@ -10,7 +10,6 @@ export class AuthService {
   private authEndpoints: any;
 
   constructor(private configService: ConfigService) {
-    // Inicializa a URL base e os endpoints do serviço de configuração
     this.baseUrl = this.configService.getBaseUrl();
     this.authEndpoints = this.configService.getAuthEndpoints();
   }
