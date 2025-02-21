@@ -38,16 +38,6 @@ export class TransactionModalComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  async fetchTransactions() {
-    try {
-      const transactions = await this.transactionService.getTransactions();
-      console.log('Lista atualizada de transações:', transactions);
-      // Aqui você pode atualizar um array local caso esteja armazenando transações no componente
-    } catch (error) {
-      console.error('Erro ao buscar transações:', error);
-    }
-  }
-
   ngOnInit() {
     this.loggedUserId = this.authService.getUserId() || '';
   }
@@ -106,8 +96,7 @@ export class TransactionModalComponent implements OnInit {
 
       this.isModalVisible = false;
 
-      await this.fetchTransactions();
-
+      // Emite evento para o componente pai atualizar a lista de transações
       this.transactionAdd.emit();
     } catch (error) {
       console.error('Erro ao criar transação:', error);

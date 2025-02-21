@@ -19,7 +19,6 @@ import { TransactionService } from '../../services/transaction/transaction.servi
     CommonModule,
     TransactionModalComponent,
     CardComponent,
-    NavbarComponent,
     DashboardChartsComponent,
   ],
 })
@@ -29,6 +28,12 @@ export class DashboardComponent implements OnInit {
   total: number = 0;
   userId: string | null = null;
   transactions: TransactionModel[] = [];
+
+  // Dados formatados para o gráfico
+  chartData: { series: ApexAxisChartSeries; categories: string[] } = {
+    series: [],
+    categories: [],
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -48,10 +53,25 @@ export class DashboardComponent implements OnInit {
       this.transactions = await this.transactionService.getTransactionByUserId(
         user
       );
+      console.log('Transações:', this.transactions);
       this.calcularTotais();
+      this.formatChartData(); // Formatar os dados do gráfico
     } catch (error) {
       console.error('Erro ao carregar transações:', error);
     }
+  }
+
+  // Método para formatar os dados do gráfico
+  formatChartData(): void {
+    const categories = this.transactions.map((transaction) => transaction.name);
+    const series = this.transactions.map((transaction) => transaction.value);
+    const receitas = this.totalReceitas();
+    const despesas = this.totalDespesas();
+
+    this.chartData = {
+      series: [{ name: 'Transações', data: [receitas, despesas] }],
+      categories: ['Receitas', 'Despesas'],
+    };
   }
 
   totalReceitas(): number {
@@ -78,5 +98,6 @@ export class DashboardComponent implements OnInit {
 
   onTransactionAdded(): void {
     this.fetchTransactions();
+    console.log('Atualizando!'); // Atualiza as transações
   }
 }

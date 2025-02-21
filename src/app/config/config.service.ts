@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -20,12 +19,12 @@ export class ConfigService {
 
   getTransactionEndpoints() {
     return {
-      create: '/api/collections/records',
-      getAll: '/api/collections/records',
+      create: '/api/collections/records/records',
+      getAll: '/api/collections/records/records',
       getByUserId: (userId: string) =>
         `/api/collections/records/records?userId=${userId}`,
-      update: (id: string) => `/api/collections/records/${id}`,
-      delete: (id: string) => `/api/collections/records/${id}`,
+      update: (id: string) => `/api/collections/records/records/${id}`,
+      delete: (id: string) => `/api/collections/records/records/${id}`,
     };
   }
 }

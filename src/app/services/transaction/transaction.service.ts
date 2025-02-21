@@ -49,11 +49,24 @@ export class TransactionService {
       return [];
     }
 
+    const token = localStorage.getItem('token'); // Obtém o token armazenado
+
+    if (!token) {
+      console.error('Usuário não autenticado!');
+      throw new Error('Usuário não autenticado!');
+    }
+
     try {
       const url = `${this.baseUrl}${this.transactionEndpoints.getByUserId(
         userId
       )}`;
-      const response = await axios.get(url);
+
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Adiciona o token no header
+        },
+      });
+
       console.log('Transações obtidas:', response.data);
       return response.data.items;
     } catch (error) {
