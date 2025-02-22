@@ -71,7 +71,6 @@ export class TransactionService {
         params: { filter: filterParam }, // Aplica o filtro como parâmetro na requisição
       });
 
-      console.log('Transações obtidas:', response.data);
       return response.data.items || []; // Garantimos que retorne um array
     } catch (error) {
       console.error('Erro ao obter transações do usuário: ', userId, error);

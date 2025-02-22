@@ -59,14 +59,9 @@ export class DashboardComponent implements OnInit {
   async fetchTransactions(): Promise<void> {
     try {
       const user = this.userId || '';
-      console.log(user);
 
       this.transactions = await this.transactionService.getTransactionByUserId(
         user
-      );
-      console.log(
-        'Transações:',
-        this.transactions.map((t) => t.created)
       );
 
       this.calcularTotais();
@@ -141,12 +136,10 @@ export class DashboardComponent implements OnInit {
       series: [receitas, despesas],
       labels: ['Receitas', 'Despesas'],
     };
-
-    console.log('Dados do gráfico principal:', this.chartData);
   }
 
   /**
-   * Método para converter data YYYY-MM-DD para nome do mês (ex: 'Fevereiro 2025').
+   * Método para converter data YYYY-MM-DD para nome do mês
    */
   getMonthFromDate(date?: string): string {
     if (!date) {

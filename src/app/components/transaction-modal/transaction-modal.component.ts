@@ -76,7 +76,6 @@ export class TransactionModalComponent implements OnInit {
       const newTransaction = await this.transactionService.createTransaction(
         this.transaction
       );
-      console.log('Transação criada:', newTransaction);
 
       Swal.fire({
         title: 'Transação criada com sucesso!',
@@ -96,7 +95,6 @@ export class TransactionModalComponent implements OnInit {
 
       this.isModalVisible = false;
 
-      console.log('Emitindo evento transactionAdd');
       this.transactionAdd.emit();
     } catch (error) {
       console.error('Erro ao criar transação:', error);
