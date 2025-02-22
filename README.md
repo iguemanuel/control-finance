@@ -1,6 +1,10 @@
 ## Control Finacce
 
+O Control Finance é um aplicativo web desenvolvido para ajudar os usuários a gerenciar suas finanças de forma simples e eficiente. Ele permite o controle de receitas e despesas, oferecendo uma visão clara do saldo financeiro. Além disso, o aplicativo permite a categorização das transações, geração de relatórios e gráficos de análise financeira, ajudando os usuários a visualizarem melhor seus hábitos de consumo e a planejarem suas finanças pessoais. A interface do aplicativo é intuitiva, facilitando o uso mesmo para quem não tem experiência com ferramentas de gestão financeira.
+
 ## Endereço de Deploy
+
+https://control-finance-e5drgpihu-igor-emanuels-projects.vercel.app
 
 ## Protótipo
 
