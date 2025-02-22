@@ -4,11 +4,12 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { TransactionModalComponent } from '../../components/transaction-modal/transaction-modal.component';
 import { CommonModule } from '@angular/common';
 import { DashboardChartsComponent } from '../../components/dashboard-charts/dashboard-charts.component';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CardComponent } from '../../components/card/card.component';
 import { TransactionModel } from '../../models/transaction';
 import { TransactionService } from '../../services/transaction/transaction.service';
 import { PieChartComponent } from '../../components/pie-chart/pie-chart.component';
+import { TableComponent } from '../../components/table/table.component';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 @Component({
   standalone: true,
@@ -22,6 +23,8 @@ import { PieChartComponent } from '../../components/pie-chart/pie-chart.componen
     CardComponent,
     DashboardChartsComponent,
     PieChartComponent,
+    TableComponent,
+    NavbarComponent,
   ],
 })
 export class DashboardComponent implements OnInit {
@@ -29,6 +32,7 @@ export class DashboardComponent implements OnInit {
   saida: number = 0;
   total: number = 0;
   userId: string | null = null;
+  userName: string = '';
   transactions: TransactionModel[] = [];
 
   // Dados formatados para o gráfico
@@ -62,7 +66,7 @@ export class DashboardComponent implements OnInit {
       );
       console.log(
         'Transações:',
-        this.transactions.map((t) => t.created) // Agora só imprime YYYY-MM-DD
+        this.transactions.map((t) => t.created)
       );
 
       this.calcularTotais();
@@ -169,7 +173,6 @@ export class DashboardComponent implements OnInit {
       'Dezembro',
     ];
 
-    // Retorna o mês e ano no formato "Mês/Ano"
     return `${months[month - 1]}/${year}`;
   }
 
@@ -197,6 +200,6 @@ export class DashboardComponent implements OnInit {
 
   onTransactionAdded(): void {
     this.fetchTransactions();
-    console.log('Atualizando!'); // Atualiza as transações
+    console.log('Atualizando!');
   }
 }
