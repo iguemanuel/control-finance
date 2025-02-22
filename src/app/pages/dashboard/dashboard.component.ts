@@ -8,6 +8,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { CardComponent } from '../../components/card/card.component';
 import { TransactionModel } from '../../models/transaction';
 import { TransactionService } from '../../services/transaction/transaction.service';
+import { PieChartComponent } from '../../components/pie-chart/pie-chart.component';
 
 @Component({
   standalone: true,
@@ -20,6 +21,7 @@ import { TransactionService } from '../../services/transaction/transaction.servi
     TransactionModalComponent,
     CardComponent,
     DashboardChartsComponent,
+    PieChartComponent,
   ],
 })
 export class DashboardComponent implements OnInit {
@@ -33,6 +35,11 @@ export class DashboardComponent implements OnInit {
   chartData: { series: ApexAxisChartSeries; categories: string[] } = {
     series: [],
     categories: [],
+  };
+
+  chartDataForPieChart: { series: number[]; labels: string[] } = {
+    series: [0, 0],
+    labels: [],
   };
 
   constructor(
@@ -53,7 +60,11 @@ export class DashboardComponent implements OnInit {
       this.transactions = await this.transactionService.getTransactionByUserId(
         user
       );
-      console.log('Transações:', this.transactions);
+      console.log(
+        'Transações:',
+        this.transactions.map((t) => t.created) // Agora só imprime YYYY-MM-DD
+      );
+
       this.calcularTotais();
       this.formatChartData(); // Formatar os dados do gráfico
     } catch (error) {
@@ -61,17 +72,105 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // Método para formatar os dados do gráfico
   formatChartData(): void {
-    const categories = this.transactions.map((transaction) => transaction.name);
-    const series = this.transactions.map((transaction) => transaction.value);
+    if (!this.transactions || this.transactions.length === 0) {
+      console.warn('Nenhuma transação disponível para o gráfico.');
+      return;
+    }
+
+    const groupedByMonth: {
+      [month: string]: { receitas: number; despesas: number; total: number };
+    } = {};
+
+    this.transactions.forEach((transaction) => {
+      const month = this.getMonthFromDate(transaction.created);
+
+      if (!month) {
+        console.warn('Transação sem data válida:', transaction);
+        return;
+      }
+
+      if (!groupedByMonth[month]) {
+        groupedByMonth[month] = { receitas: 0, despesas: 0, total: 0 };
+      }
+
+      if (transaction.type === 'IN') {
+        groupedByMonth[month].receitas += transaction.value;
+      } else if (transaction.type === 'OUT') {
+        groupedByMonth[month].despesas += transaction.value;
+      }
+
+      groupedByMonth[month].total =
+        groupedByMonth[month].receitas - groupedByMonth[month].despesas;
+    });
+
+    if (Object.keys(groupedByMonth).length === 0) {
+      console.warn('Nenhum dado processado para o gráfico.');
+      return;
+    }
+
+    // Extrair os dados formatados para o gráfico
+    const categories = Object.keys(groupedByMonth); // Nome dos meses
+    const receitasData = categories.map(
+      (month) => groupedByMonth[month].receitas
+    );
+    const despesasData = categories.map(
+      (month) => groupedByMonth[month].despesas
+    );
+    const totalData = categories.map((month) => groupedByMonth[month].total);
+
+    // Atualizar os dados do gráfico principal
+    this.chartData = {
+      series: [
+        { name: 'Receitas', data: receitasData },
+        { name: 'Despesas', data: despesasData },
+        { name: 'Total', data: totalData },
+      ],
+      categories: categories, // Agora temos os meses no eixo X
+    };
+
+    // Mantendo o gráfico de pizza sem alterações
     const receitas = this.totalReceitas();
     const despesas = this.totalDespesas();
 
-    this.chartData = {
-      series: [{ name: 'Transações', data: [receitas, despesas] }],
-      categories: ['Receitas', 'Despesas'],
+    this.chartDataForPieChart = {
+      series: [receitas, despesas],
+      labels: ['Receitas', 'Despesas'],
     };
+
+    console.log('Dados do gráfico principal:', this.chartData);
+  }
+
+  /**
+   * Método para converter data YYYY-MM-DD para nome do mês (ex: 'Fevereiro 2025').
+   */
+  getMonthFromDate(date?: string): string {
+    if (!date) {
+      return 'Mês não disponível'; // Valor padrão caso a data seja undefined ou vazia
+    }
+
+    const dateObj = new Date(date);
+    const month = dateObj.getMonth() + 1;
+    const year = dateObj.getFullYear();
+
+    // Mapeamento dos meses
+    const months: string[] = [
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro',
+    ];
+
+    // Retorna o mês e ano no formato "Mês/Ano"
+    return `${months[month - 1]}/${year}`;
   }
 
   totalReceitas(): number {

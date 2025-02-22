@@ -92,7 +92,7 @@ export class DashboardChartsComponent implements OnChanges {
         },
       },
       title: {
-        text: 'Gráfico de Vendas',
+        text: 'Gráfico de movimentações financeiras',
         align: 'center',
       },
       legend: {

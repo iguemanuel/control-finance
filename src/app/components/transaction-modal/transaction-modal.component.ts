@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionModel } from '../../models/transaction';
@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 export class TransactionModalComponent implements OnInit {
   loggedUserId: string = '';
 
-  transactionAdd: EventEmitter<void> = new EventEmitter<void>();
+  @Output() transactionAdd = new EventEmitter<void>();
 
   transaction: TransactionModel = new TransactionModel({
     userId: '',
@@ -96,7 +96,7 @@ export class TransactionModalComponent implements OnInit {
 
       this.isModalVisible = false;
 
-      // Emite evento para o componente pai atualizar a lista de transações
+      console.log('Emitindo evento transactionAdd');
       this.transactionAdd.emit();
     } catch (error) {
       console.error('Erro ao criar transação:', error);

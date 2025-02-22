@@ -6,29 +6,36 @@
   <div class="flex-1 p-6 ml-6">
     <h1 class="text-2xl font-bold">Dashboard</h1>
     <app-transaction-modal
-      (transactionAdded)="fetchTransactions()"
+      (transactionAdd)="fetchTransactions()"
     ></app-transaction-modal>
 
-    <div class="grid grid-cols-3">
+    <!-- Cards de Resumo -->
+    <div class="grid grid-cols-3 gap-4">
       <app-card
         [title]="'Total Entrada'"
         [value]="totalReceitas()"
         [customClass]="'text-green-600'"
-      >
-      </app-card>
+      ></app-card>
       <app-card
         [title]="'Total Saída'"
         [value]="totalDespesas()"
         [customClass]="'text-red-600'"
-      >
-      </app-card>
+      ></app-card>
       <app-card
         [title]="'Saldo Atual'"
         [value]="calcularTotal()"
         [customClass]="total >= 0 ? 'text-green-600' : 'text-red-600'"
-      >
-      </app-card>
-      <app-dashboard-charts [chartData]="chartData"></app-dashboard-charts>
+      ></app-card>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid grid-cols-3 gap-4 mt-6">
+      <div class="col-span-2">
+        <app-dashboard-charts [chartData]="chartData"></app-dashboard-charts>
+      </div>
+      <div class="col-span-1">
+        <app-pie-chart [chartData]="chartDataForPieChart"></app-pie-chart>
+      </div>
     </div>
   </div>
 </div>
