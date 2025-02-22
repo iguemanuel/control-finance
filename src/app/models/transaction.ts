@@ -1,10 +1,11 @@
 export interface Transaction {
   name: string;
   id?: string;
-  type: 'IN' | 'OUT';
+  type: string;
   category: string;
   value: number;
-  date?: Date;
+  created?: string;
+  updated?: string;
   description?: string;
   userId: string;
 }
@@ -12,10 +13,11 @@ export interface Transaction {
 export class TransactionModel implements Transaction {
   name: string;
   id?: string;
-  type: 'IN' | 'OUT';
+  type: string;
   category: string;
   value: number;
-  date?: Date;
+  created?: string;
+  updated?: string;
   description?: string;
   userId: string;
 
@@ -25,8 +27,9 @@ export class TransactionModel implements Transaction {
     this.type = transaction.type;
     this.category = transaction.category;
     this.value = transaction.value;
-    this.date = transaction.date;
-    this.description = transaction.description;
+    this.created = transaction.created;
+    this.created = transaction.created?.split('T')[0]; // Extrai apenas a data (YYYY-MM-DD)
+    this.updated = transaction.updated?.split('T')[0];
     this.userId = transaction.userId;
   }
 
@@ -37,7 +40,8 @@ export class TransactionModel implements Transaction {
       type: this.type,
       category: this.category,
       value: this.value,
-      date: this.date,
+      created: this.created,
+      updated: this.updated,
       description: this.description,
       userId: this.userId,
     };

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TransactionModel } from '../../models/transaction';
@@ -16,14 +16,20 @@ import Swal from 'sweetalert2';
 export class TransactionModalComponent implements OnInit {
   loggedUserId: string = '';
 
+  @Output() transactionAdd = new EventEmitter<void>();
+
   transaction: TransactionModel = new TransactionModel({
     userId: '',
     name: '',
-    type: 'IN',
+    type: '',
     category: '',
     value: 0,
     description: '',
   });
+
+  updateTransactionType() {
+    this.transaction.type = this.transaction.category;
+  }
 
   isModalVisible: boolean = false;
 
@@ -37,11 +43,7 @@ export class TransactionModalComponent implements OnInit {
   }
 
   validateForm(): boolean {
-    if (
-      !this.transaction.name ||
-      !this.transaction.category ||
-      !this.transaction.description
-    ) {
+    if (!this.transaction.name || !this.transaction.category) {
       Swal.fire({
         title: 'Erro',
         text: 'Todos os campos obrigatórios devem ser preenchidos!',
@@ -64,8 +66,9 @@ export class TransactionModalComponent implements OnInit {
   }
 
   async submitForm() {
+    this.updateTransactionType();
     if (!this.validateForm()) {
-      return; // Se a validação falhar, não envia o formulário
+      return;
     }
 
     try {
@@ -73,15 +76,26 @@ export class TransactionModalComponent implements OnInit {
       const newTransaction = await this.transactionService.createTransaction(
         this.transaction
       );
-      console.log('Transação criada:', newTransaction);
+
       Swal.fire({
         title: 'Transação criada com sucesso!',
         icon: 'success',
         draggable: true,
       });
 
-      // Fechar o modal
+      // Limpa o formulário para permitir um novo cadastro
+      this.transaction = new TransactionModel({
+        userId: '',
+        name: '',
+        type: '',
+        category: '',
+        value: 0,
+        description: '',
+      });
+
       this.isModalVisible = false;
+
+      this.transactionAdd.emit();
     } catch (error) {
       console.error('Erro ao criar transação:', error);
       Swal.fire({

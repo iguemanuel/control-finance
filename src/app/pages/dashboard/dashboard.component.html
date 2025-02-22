@@ -1,10 +1,50 @@
-<div class="flex">
-  <!-- Sidebar -->
-  <app-sidebar></app-sidebar>
+<div class="flex flex-col md:flex-row h-screen">
+  <!-- Navbar (aparece em dispositivos móveis) -->
+  <app-navbar class="md:hidden"></app-navbar>
+
+  <!-- Sidebar (aparece em telas médias e maiores) -->
+  <app-sidebar class="hidden md:block"></app-sidebar>
 
   <!-- Conteúdo principal -->
-  <div class="flex-1 p-6 ml-6">
+  <div class="flex-1 p-6 md:ml-6">
     <h1 class="text-2xl font-bold">Dashboard</h1>
-    <app-transaction-modal></app-transaction-modal>
+    <app-transaction-modal
+      (transactionAdd)="fetchTransactions()"
+    ></app-transaction-modal>
+
+    <!-- Cards de Resumo -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <app-card
+        [title]="'Total Entrada'"
+        [value]="totalReceitas()"
+        [customClass]="'text-green-600'"
+      ></app-card>
+      <app-card
+        [title]="'Total Saída'"
+        [value]="totalDespesas()"
+        [customClass]="'text-red-600'"
+      ></app-card>
+      <app-card
+        [title]="'Saldo Atual'"
+        [value]="calcularTotal()"
+        [customClass]="total >= 0 ? 'text-green-600' : 'text-red-600'"
+      ></app-card>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 mb-6">
+      <div class="col-span-1 sm:col-span-2 lg:col-span-2">
+        <app-dashboard-charts [chartData]="chartData"></app-dashboard-charts>
+      </div>
+      <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+        <app-pie-chart [chartData]="chartDataForPieChart"></app-pie-chart>
+      </div>
+    </div>
+
+    <!-- Tabela de Transações -->
+    <app-table
+      [transactions]="transactions"
+      (transactionDeleted)="onTransactionAdded()"
+    ></app-table>
   </div>
 </div>
